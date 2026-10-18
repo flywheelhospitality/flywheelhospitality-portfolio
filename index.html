@@ -845,8 +845,7 @@
 
           <div class="col-lg-8">
             <!-- Enquiries are sent by FormSubmit (formsubmit.co) to the email below - works on GitHub Pages, no server needed -->
-            <form id="enquiry-form" action="https://formsubmit.co/ajax/flywheelhospitality@gmail.com" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
-              <input type="hidden" name="_subject" value="New hotel owner enquiry - Flywheel Hospitality website">
+<form id="enquiry-form" novalidate action="https://formsubmit.co/ajax/flywheelhospitality@gmail.com" method="post" class="fw-enquiry-form" data-aos="fade-up" data-aos-delay="200">              <input type="hidden" name="_subject" value="New hotel owner enquiry - Flywheel Hospitality website">
               <input type="hidden" name="_template" value="table">
               <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
               <div class="row gy-4">
@@ -858,12 +857,15 @@
 
                 <div class="col-md-6">
                   <label for="f-mobile">Mobile <span class="req">*</span></label>
-                  <input type="tel" id="f-mobile" name="mobile" class="form-control" placeholder="Phone / WhatsApp" required>
+                    <input type="tel" id="f-mobile" name="mobile" class="form-control" placeholder="10-digit mobile number" inputmode="numeric" maxlength="10" pattern="[0-9]{10}" autocomplete="tel-national" required>
+                  <div class="field-error" id="err-mobile"></div>
+
                 </div>
 
                 <div class="col-md-6">
                   <label for="f-email">Email</label>
-                  <input type="email" id="f-email" name="email" class="form-control" placeholder="Business email">
+                  <input type="email" id="f-email" name="email" class="form-control" placeholder="Business email" autocomplete="email">
+                  <div class="field-error" id="err-email"></div>
                 </div>
 
                 <div class="col-md-6">
@@ -873,7 +875,8 @@
 
                 <div class="col-md-6">
                   <label for="f-location">Location <span class="req">*</span></label>
-                  <input type="text" id="f-location" name="location" class="form-control" placeholder="City / district" required>
+                  <input type="text" id="f-location" name="location" class="form-control" placeholder="City / district" maxlength="60" required>
+                  <div class="field-error" id="err-location"></div>
                 </div>
 
                 <div class="col-md-6">
@@ -1058,7 +1061,6 @@
 
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
   <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
@@ -1068,8 +1070,7 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
-  <script src="assets/js/enquiry-form.js"></script>
-
+  <script src="assets/js/enquiry-form.js?v=4"></script>
 </body>
 
 </html>
