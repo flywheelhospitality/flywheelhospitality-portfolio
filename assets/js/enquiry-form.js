@@ -1,65 +1,112 @@
 /**
- * Flywheel Hospitality - enquiry form
- * Sends the "Partner With Us" form to FormSubmit (https://formsubmit.co) via AJAX.
- * Works on static hosting such as GitHub Pages (no PHP needed).
- *
- * Duplicate protection (in this browser):
- *  - the button is locked while a submission is in progress (no double clicks)
- *  - an email or mobile number that has already submitted cannot submit again
- *    until DUPLICATE_WINDOW_DAYS have passed
+ * Flywheel Hospitality - enquiry form (v4)
+ * - Field validation: mobile (10 digits), email format, location (letters only), rooms (numbers only)
+ * - Sends to FormSubmit (https://formsubmit.co) via AJAX - works on GitHub Pages
+ * - Duplicate protection (this browser): same email OR same mobile cannot submit again
+ *   within DUPLICATE_WINDOW_DAYS
  */
 (function () {
   "use strict";
 
-  const DUPLICATE_WINDOW_DAYS = 30;            // set to 0 to block forever
+  const DUPLICATE_WINDOW_DAYS = 30;            // 0 = block forever
   const STORAGE_KEY = "fw_enquiries_sent";
   const CONTACT_LINE = "call or WhatsApp us on +91 86100 46992";
 
   const form = document.getElementById("enquiry-form");
   if (!form) return;
 
-  const loading = form.querySelector(".loading");
-  const errorBox = form.querySelector(".error-message");
-  const sentBox = form.querySelector(".sent-message");
-  const button = form.querySelector('button[type="submit"]');
+  const $ = (sel) => form.querySelector(sel);
+  const loading = $(".loading"), errorBox = $(".error-message"), sentBox = $(".sent-message");
+  const button = $('button[type="submit"]');
+  const f = {
+    name: $("#f-name"), mobile: $("#f-mobile"), email: $("#f-email"),
+    property: $("#f-property"), location: $("#f-location"), rooms: $("#f-rooms"),
+    challenge: $("#f-challenge")
+  };
   let submitting = false;
 
   function show(el, on) { if (el) el.style.display = on ? "block" : "none"; }
   function showError(msg) { errorBox.textContent = msg; show(errorBox, true); }
 
-  // Normalise so "A@Gmail.com " and "a@gmail.com" count as the same, and
-  // "+91 86100-46992" and "8610046992" count as the same number.
-  function emailKey(v) { v = (v || "").trim().toLowerCase(); return v ? "e:" + v : null; }
-  function mobileKey(v) { v = (v || "").replace(/\D/g, "").slice(-10); return v.length >= 10 ? "m:" + v : null; }
+  /* ---------- Input filters: block wrong characters while typing / pasting ---------- */
+  f.mobile.addEventListener("input", () => {           // digits only, max 10
+    f.mobile.value = f.mobile.value.replace(/\D/g, "").slice(0, 10);
+  });
+  f.rooms.addEventListener("input", () => {            // digits only
+    f.rooms.value = f.rooms.value.replace(/\D/g, "").slice(0, 4);
+  });
+  f.location.addEventListener("input", () => {         // letters, spaces , . - only
+    f.location.value = f.location.value.replace(/[^A-Za-z\s,.\-]/g, "");
+  });
 
-  function loadSent() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { return {}; }
+  /* ---------- Validation rules ---------- */
+  const rules = {
+    name:      v => v.trim().length >= 2 || "Please enter your name.",
+    mobile:    v => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit mobile number.",
+    email:     v => v.trim() === "" || /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v.trim()) || "Enter a valid email address.",
+    property:  v => v.trim().length >= 2 || "Please enter your property name.",
+    location:  v => /^[A-Za-z][A-Za-z\s,.\-]{1,59}$/.test(v.trim()) || "Location should contain letters only (e.g. Madurai).",
+    rooms:     v => (/^[0-9]+$/.test(v) && parseInt(v, 10) > 0) || "Enter the number of rooms (numbers only).",
+    challenge: v => v !== "" || "Please select your main challenge."
+  };
+
+  function setFieldError(input, msg) {
+    const box = document.getElementById("err-" + input.id.replace("f-", ""));
+    if (msg) { input.classList.add("is-invalid"); if (box) box.textContent = msg; }
+    else { input.classList.remove("is-invalid"); if (box) box.textContent = ""; }
   }
+  function validateField(key) {
+    const input = f[key]; if (!input) return true;
+    const r = rules[key](input.value || "");
+    setFieldError(input, r === true ? "" : r);
+    return r === true;
+  }
+  Object.keys(rules).forEach(k => {
+    if (!f[k]) return;
+    f[k].addEventListener("blur", () => validateField(k));
+    f[k].addEventListener("input", () => { if (f[k].classList.contains("is-invalid")) validateField(k); });
+    f[k].addEventListener("change", () => validateField(k));
+  });
+  function validateAll() {
+    let firstBad = null;
+    Object.keys(rules).forEach(k => { if (!validateField(k) && !firstBad) firstBad = f[k]; });
+    if (firstBad) firstBad.focus();
+    return !firstBad;
+  }
+
+  /* ---------- Duplicate protection ---------- */
+  const emailKey = v => { v = (v || "").trim().toLowerCase(); return v ? "e:" + v : null; };
+  const mobileKey = v => { v = (v || "").replace(/\D/g, ""); return v.length === 10 ? "m:" + v : null; };
+  function loadSent() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { return {}; } }
   function saveSent(keys) {
     try {
-      const sent = loadSent(); const now = Date.now();
+      const sent = loadSent(), now = Date.now();
       keys.forEach(k => { if (k) sent[k] = now; });
       localStorage.setItem(STORAGE_KEY, JSON.stringify(sent));
-    } catch (e) { /* storage unavailable - skip */ }
+    } catch (e) {}
   }
-  function alreadySent(keys) {
-    const sent = loadSent();
-    const windowMs = DUPLICATE_WINDOW_DAYS * 24 * 60 * 60 * 1000;
-    return keys.some(k => k && sent[k] && (DUPLICATE_WINDOW_DAYS === 0 || Date.now() - sent[k] < windowMs));
+  function duplicateOf(keys) {
+    const sent = loadSent(), windowMs = DUPLICATE_WINDOW_DAYS * 864e5;
+    return keys.find(k => k && sent[k] && (DUPLICATE_WINDOW_DAYS === 0 || Date.now() - sent[k] < windowMs)) || null;
   }
 
+  /* ---------- Submit ---------- */
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
-    if (submitting) return;                                   // ignore double clicks
-    if (!form.checkValidity()) { form.reportValidity(); return; }
-
+    if (submitting) return;
     show(errorBox, false); show(sentBox, false);
+    if (!validateAll()) return;
 
     const data = Object.fromEntries(new FormData(form).entries());
-    const keys = [emailKey(data.email), mobileKey(data.mobile)];
+    data.email = (data.email || "").trim().toLowerCase();
+    data.location = (data.location || "").trim();
 
-    if (alreadySent(keys)) {
-      showError("We’ve already received an enquiry from this email / mobile number. Our team will contact you shortly — for anything urgent, " + CONTACT_LINE + ".");
+    const dup = duplicateOf([emailKey(data.email), mobileKey(data.mobile)]);
+    if (dup) {
+      const what = dup.startsWith("e:") ? "email address" : "mobile number";
+      if (dup.startsWith("e:")) setFieldError(f.email, "An enquiry from this email was already received.");
+      else setFieldError(f.mobile, "An enquiry from this mobile number was already received.");
+      showError("We’ve already received an enquiry from this " + what + ". Our team will contact you shortly — for anything urgent, " + CONTACT_LINE + ".");
       return;
     }
 
@@ -74,9 +121,8 @@
       });
       const json = await res.json().catch(() => ({}));
       show(loading, false);
-
       if (res.ok && String(json.success) === "true") {
-        saveSent(keys);
+        saveSent([emailKey(data.email), mobileKey(data.mobile)]);
         show(sentBox, true);
         form.reset();
       } else {
