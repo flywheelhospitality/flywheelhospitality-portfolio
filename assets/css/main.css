@@ -77,7 +77,7 @@ h6 {
 
 /* PHP Email Form Messages
 ------------------------------*/
-.php-email-form .error-message {
+.fw-enquiry-form .error-message  {
   display: none;
   background: #df1529;
   color: #ffffff;
@@ -87,7 +87,7 @@ h6 {
   font-weight: 600;
 }
 
-.php-email-form .sent-message {
+.fw-enquiry-form .sent-message {
   display: none;
   color: #ffffff;
   background: #059652;
@@ -97,7 +97,7 @@ h6 {
   font-weight: 600;
 }
 
-.php-email-form .loading {
+.fw-enquiry-form .loading {
   display: none;
   background: var(--surface-color);
   text-align: center;
@@ -105,7 +105,7 @@ h6 {
   margin-bottom: 24px;
 }
 
-.php-email-form .loading:before {
+.fw-enquiry-form .loading:before {
   content: "";
   display: inline-block;
   border-radius: 50%;
@@ -1917,15 +1917,15 @@ section,
   margin-bottom: 0;
 }
 
-.contact .php-email-form {
+.contact .fw-enquiry-form {
   background: color-mix(in srgb, var(--default-color), transparent 96%);
   padding: 30px;
   height: 100%;
 }
 
-.contact .php-email-form input[type=text],
-.contact .php-email-form input[type=email],
-.contact .php-email-form textarea {
+.contact .fw-enquiry-form input[type=text],
+.contact .fw-enquiry-form input[type=email],
+.contact .fw-enquiry-form textarea {
   font-size: 14px;
   padding: 10px 15px;
   box-shadow: none;
@@ -1935,19 +1935,19 @@ section,
   border-color: color-mix(in srgb, var(--default-color), transparent 80%);
 }
 
-.contact .php-email-form input[type=text]:focus,
-.contact .php-email-form input[type=email]:focus,
-.contact .php-email-form textarea:focus {
+.contact .fw-enquiry-form input[type=text]:focus,
+.contact .fw-enquiry-form input[type=email]:focus,
+.contact .fw-enquiry-form textarea:focus {
   border-color: var(--accent-color);
 }
 
-.contact .php-email-form input[type=text]::placeholder,
-.contact .php-email-form input[type=email]::placeholder,
-.contact .php-email-form textarea::placeholder {
+.contact .fw-enquiry-form input[type=text]::placeholder,
+.contact .fw-enquiry-form input[type=email]::placeholder,
+.contact .fw-enquiry-form textarea::placeholder {
   color: color-mix(in srgb, var(--default-color), transparent 70%);
 }
 
-.contact .php-email-form button[type=submit] {
+.contact .fw-enquiry-form button[type=submit] {
   background: var(--accent-color);
   color: var(--contrast-color);
   border: 0;
@@ -1956,7 +1956,7 @@ section,
   border-radius: 4px;
 }
 
-.contact .php-email-form button[type=submit]:hover {
+.contact .fw-enquiry-form button[type=submit]:hover {
   background: color-mix(in srgb, var(--accent-color), transparent 20%);
 }
 
@@ -2854,14 +2854,14 @@ section,
 .btn-brand.outline { background: transparent; border:2px solid var(--accent-color); color: var(--accent-color); margin-left:10px; }
 .btn-brand.outline:hover { background: var(--accent-color); color:#fff; }
 
-.contact .php-email-form input[type=tel],
-.contact .php-email-form input[type=number],
-.contact .php-email-form select { font-size:14px; padding:10px 15px; box-shadow:none; border-radius:0; color: var(--default-color); background-color: color-mix(in srgb, var(--background-color), transparent 50%); border-color: color-mix(in srgb, var(--default-color), transparent 80%); }
-.contact .php-email-form input[type=tel]:focus,
-.contact .php-email-form input[type=number]:focus,
-.contact .php-email-form select:focus { border-color: var(--accent-color); }
-.contact .php-email-form label { font-size:13px; font-weight:600; margin-bottom:4px; }
-.contact .php-email-form label .req { color:#c0392b; }
+.contact .fw-enquiry-form input[type=tel],
+.contact .fw-enquiry-form input[type=number],
+.contact .fw-enquiry-form select { font-size:14px; padding:10px 15px; box-shadow:none; border-radius:0; color: var(--default-color); background-color: color-mix(in srgb, var(--background-color), transparent 50%); border-color: color-mix(in srgb, var(--default-color), transparent 80%); }
+.contact .fw-enquiry-form input[type=tel]:focus,
+.contact .fw-enquiry-form input[type=number]:focus,
+.contact .fw-enquiry-form select:focus { border-color: var(--accent-color); }
+.contact .fw-enquiry-form label { font-size:13px; font-weight:600; margin-bottom:4px; }
+.contact .fw-enquiry-form label .req { color:#c0392b; }
 
 .footer .footer-about .sitename span { color: var(--accent-color); }
 
@@ -2890,3 +2890,8 @@ section,
   .btn-brand.outline { margin-left: 0; margin-top: 10px; }
 }
 @media (max-width: 380px) { .header .logo h1 span { display:block; } }
+
+/* Enquiry form inline validation */
+.contact .fw-enquiry-form .field-error { display:none; color:#c0392b; font-size:12.5px; margin-top:4px; }
+.contact .fw-enquiry-form .is-invalid { border-color:#c0392b !important; }
+.contact .fw-enquiry-form .is-invalid + .field-error { display:block; }
