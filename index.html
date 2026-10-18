@@ -844,6 +844,130 @@
           </div>
 
           <div class="col-lg-8">
+            <!-- Enquiries are sent by FormSubmit (formsubmit.co) to the email below - works on GitHub Pages, no server needed -->
+            <form id="enquiry-form" action="https://formsubmit.co/ajax/flywheelhospitality@gmail.com" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+              <input type="hidden" name="_subject" value="New hotel owner enquiry - Flywheel Hospitality website">
+              <input type="hidden" name="_template" value="table">
+              <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+              <div class="row gy-4">
+
+                <div class="col-md-6">
+                  <label for="f-name">Name <span class="req">*</span></label>
+                  <input type="text" id="f-name" name="name" class="form-control" placeholder="Hotel owner / decision maker name" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="f-mobile">Mobile <span class="req">*</span></label>
+                  <input type="tel" id="f-mobile" name="mobile" class="form-control" placeholder="Phone / WhatsApp" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="f-email">Email</label>
+                  <input type="email" id="f-email" name="email" class="form-control" placeholder="Business email">
+                </div>
+
+                <div class="col-md-6">
+                  <label for="f-property">Property Name <span class="req">*</span></label>
+                  <input type="text" id="f-property" name="property_name" class="form-control" placeholder="Hotel / resort / property name" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="f-location">Location <span class="req">*</span></label>
+                  <input type="text" id="f-location" name="location" class="form-control" placeholder="City / district" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="f-rooms">Number of Rooms <span class="req">*</span></label>
+                  <input type="number" id="f-rooms" name="rooms" min="1" class="form-control" placeholder="Current or planned room count" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="f-occupancy">Current Occupancy</label>
+                  <input type="text" id="f-occupancy" name="occupancy" class="form-control" placeholder="Approximate occupancy (e.g. 40%)">
+                </div>
+
+
+                <div class="col-md-6">
+                  <label class="form-label">
+                    Current Challenges <span class="req">*</span>
+                  </label>
+
+                  <div class="border rounded p-3">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox"
+                            name="challenge[]" id="challenge-occupancy"
+                            value="Occupancy">
+                      <label class="form-check-label" for="challenge-occupancy">
+                        Occupancy
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox"
+                            name="challenge[]" id="challenge-pricing"
+                            value="Pricing">
+                      <label class="form-check-label" for="challenge-pricing">
+                        Pricing
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox"
+                            name="challenge[]" id="challenge-operations"
+                            value="Operations">
+                      <label class="form-check-label" for="challenge-operations">
+                        Operations
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox"
+                            name="challenge[]" id="challenge-ota"
+                            value="OTA">
+                      <label class="form-check-label" for="challenge-ota">
+                        OTA
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox"
+                            name="challenge[]" id="challenge-marketing"
+                            value="Marketing">
+                      <label class="form-check-label" for="challenge-marketing">
+                        Marketing
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox"
+                            name="challenge[]" id="challenge-other"
+                            value="Other">
+                      <label class="form-check-label" for="challenge-other">
+                        Other
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <label for="f-message">Message</label>
+                  <textarea id="f-message" class="form-control" name="message" rows="5" placeholder="Additional information"></textarea>
+                </div>
+
+                <div class="col-md-12 text-center">
+                  <div class="loading">Loading</div>
+                  <div class="error-message"></div>
+                  <div class="sent-message">Thank you for reaching out! Our team will contact you shortly.</div>
+
+                  <button type="submit">Submit</button>
+                </div>
+
+              </div>
+            </form>
+          </div><!-- End Contact Form -->
+
+
+          <!-- <div class="col-lg-8">
             <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
               <div class="row gy-4">
 
@@ -960,7 +1084,7 @@
 
               </div>
             </form>
-          </div><!-- End Contact Form -->
+          </div>End Contact Form -->
 
         </div>
 
